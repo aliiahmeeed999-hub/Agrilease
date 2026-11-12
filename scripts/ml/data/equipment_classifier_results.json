@@ -1,0 +1,13 @@
+{
+  "n_rows": 800,
+  "n_train": 640,
+  "n_test": 160,
+  "random_forest_comparison_only": {
+    "accuracy": 0.713,
+    "macro_f1": 0.63
+  },
+  "decision_tree_served": {
+    "accuracy": 0.644,
+    "macro_f1": 0.543
+  }
+}

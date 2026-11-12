@@ -1,0 +1,673 @@
+// agriLease data model
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Role {
+  FARMER
+  RENTAL_OWNER
+  BANKER
+  ADMIN
+}
+
+enum VerificationStatus {
+  UNVERIFIED
+  PENDING
+  VERIFIED
+}
+
+enum AccountType {
+  INDIVIDUAL
+  COMPANY
+}
+
+enum AdminLevel {
+  SUPER_ADMIN
+  MODERATOR
+}
+
+enum Locale {
+  EN
+  FR
+  AR
+}
+
+enum CropType {
+  WHEAT
+  BARLEY
+  OLIVES
+  CITRUS
+  VEGETABLES
+  OTHER
+}
+
+enum IrrigationType {
+  DRIP
+  SPRINKLER
+  FLOOD
+  RAINFED
+  NONE
+}
+
+enum WaterSource {
+  WELL
+  RIVER
+  RESERVOIR
+  MUNICIPAL
+  RAINWATER
+}
+
+enum SoilType {
+  CLAY
+  SANDY
+  LOAM
+  SILT
+  CHALKY
+  PEAT
+}
+
+enum FieldStatus {
+  GROWING
+  HARVESTED
+  FALLOW
+}
+
+enum EquipmentType {
+  TRACTOR
+  HARVESTER
+  SPRAYER
+  PLOW
+  TRAILER
+  IRRIGATION_PUMP
+}
+
+enum EquipmentStatus {
+  ACTIVE
+  IDLE
+  MAINTENANCE
+  OFFLINE
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum WorkerStatus {
+  ACTIVE
+  ON_LEAVE
+}
+
+enum AlertType {
+  HYDRAULIC_PRESSURE_DROP
+  SERVICE_COMPLETED
+  GPS_SIGNAL_UNSTABLE
+  LOW_FUEL
+  MAINTENANCE_DUE
+}
+
+enum AlertSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+enum BookingStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  REFUNDED
+}
+
+// Deliberately separate from EquipmentType (a narrower taxonomy consumed by
+// src/lib/ai/recommendations.ts's matching logic, which stays untouched) -
+// this is a coarser, marketplace-browsing-only category.
+enum EquipmentCategory {
+  TRACTOR
+  COMBINE_HARVESTER
+  TILLAGE
+  SEEDING_PLANTING
+  SPRAYER
+  IRRIGATION
+  TRANSPORT_TRAILER
+  HARVESTING_OTHER
+  UTILITY_VEHICLE
+  OTHER
+}
+
+enum ListingType {
+  RENT
+  SALE
+  RENT_AND_SALE
+}
+
+enum Condition {
+  NEW
+  USED
+}
+
+enum TransactionType {
+  RENT
+  SALE
+}
+
+enum FinancingStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  CHANGES_REQUESTED
+  APPROVED
+  REJECTED
+}
+
+enum ClientType {
+  INDIVIDUAL_FARMER
+  COOPERATIVE
+  GIE
+  AGRICULTURAL_COMPANY
+  ENTERPRISE
+  COLLECTIVITY
+  OTHER
+}
+
+// Broader eligibility-classification taxonomy for financing applications -
+// deliberately separate from CropType (precise field-level crop tracking),
+// since this also covers non-crop activities (livestock, viticulture) that
+// CropType has no room for.
+enum FarmActivityType {
+  CEREALS
+  MARKET_GARDENING
+  ARBORICULTURE
+  CITRUS
+  OLIVE
+  LIVESTOCK
+  VITICULTURE
+  FORAGE
+  OTHER
+}
+
+enum AdminActionType {
+  USER_ROLE_CHANGED
+  USER_VERIFIED
+  USER_UNVERIFIED
+  USER_SUSPENDED
+  USER_UNSUSPENDED
+  LISTING_FLAGGED
+  LISTING_UNFLAGGED
+  LISTING_REMOVED
+  LISTING_MODERATION_FLAG_SET
+}
+
+enum NotificationType {
+  EQUIPMENT_AVAILABLE
+  RAIN_EXPECTED
+  HARVEST_REMINDER
+  RENTAL_APPROVED
+  MAINTENANCE_DUE
+  TASK_DUE_SOON
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  fullName     String
+  role         Role     @default(FARMER)
+  phone        String?
+  region       String?
+  isSuspended  Boolean  @default(false)
+  preferredLanguage Locale @default(FR)
+  avatarUrl          String?
+  cin                String?              // Farmer CIN - private, not shown publicly
+  verificationStatus VerificationStatus   @default(UNVERIFIED)
+  adminLevel         AdminLevel?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  farms            Farm[]         @relation("FarmOwner")
+  equipment        Equipment[]    @relation("EquipmentOwner")
+  bookingsAsRenter Booking[]      @relation("BookingRenter")
+  notifications    Notification[]
+  reviews          Review[]
+  rentalOwnerProfile RentalOwnerProfile?
+  bankerProfile      BankerProfile?
+  financingRequestsAsFarmer FinancingRequest[] @relation("FinancingRequestFarmer")
+  financingRequestsAsBanker FinancingRequest[] @relation("FinancingRequestBanker")
+  activityLogEntries        ActivityLog[]      @relation("ActivityLogActor")
+}
+
+model RentalOwnerProfile {
+  id               String      @id @default(cuid())
+  userId           String      @unique
+  user             User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accountType      AccountType @default(INDIVIDUAL)
+  companyName      String?
+  companyRegNumber String?     // ICE / legal registration number
+  companyLogoUrl   String?
+  address          String?
+  iban             String?     // never included in any non-admin/finance-scoped DTO
+  createdAt        DateTime    @default(now())
+  updatedAt        DateTime    @updatedAt
+}
+
+model BankerProfile {
+  id                      String   @id @default(cuid())
+  userId                  String   @unique
+  user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  institutionName         String
+  regionsCovered          Json?    // string[] - Json since SQLite has no native array type
+  defaultInterestRateText String?
+  defaultTermsText        String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+}
+
+model Farm {
+  id             String          @id @default(cuid())
+  ownerId        String
+  owner          User            @relation("FarmOwner", fields: [ownerId], references: [id])
+  name           String
+  region         String
+  province       String?
+  sizeHectares   Float
+  latitude       Float
+  longitude      Float
+  elevation      Float?
+  irrigationType IrrigationType?
+  waterSource    WaterSource?
+  soilType       SoilType?
+  imageUrl       String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  fields           Field[]
+  workers          Worker[]
+  tasks            Task[]
+  currentEquipment Equipment[]   @relation("EquipmentCurrentFarm")
+  weatherCache     WeatherCache?
+  soilCache        SoilCache?
+
+  @@index([ownerId])
+}
+
+model Field {
+  id                String          @id @default(cuid())
+  farmId            String
+  farm              Farm            @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  name              String
+  cropType          CropType
+  areaHectares      Float
+  centerLat         Float
+  centerLng         Float
+  polygon           Json
+  status            FieldStatus     @default(GROWING)
+  soilType          SoilType?
+  irrigationMethod  IrrigationType?
+  plantedAt         DateTime?
+  expectedHarvestAt DateTime?
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  tasks      Task[]
+  cropCycles CropCycle[]
+
+  @@index([farmId])
+}
+
+model Worker {
+  id        String       @id @default(cuid())
+  farmId    String
+  farm      Farm         @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  fullName  String
+  title     String
+  phone     String?
+  isOnDuty  Boolean      @default(false)
+  status    WorkerStatus @default(ACTIVE)
+  createdAt DateTime     @default(now())
+
+  tasks Task[]
+
+  @@index([farmId])
+}
+
+model Equipment {
+  id              String          @id @default(cuid())
+  ownerId         String
+  owner           User            @relation("EquipmentOwner", fields: [ownerId], references: [id])
+  currentFarmId   String?
+  currentFarm     Farm?           @relation("EquipmentCurrentFarm", fields: [currentFarmId], references: [id])
+  name            String
+  type            EquipmentType
+  manufacturer    String
+  model           String
+  enginePowerHp   Int
+  hitchCapacityKg Int
+  maxSpeedKmh     Float
+  status          EquipmentStatus @default(IDLE)
+  currentLat      Float?
+  currentLng      Float?
+  imageUrl        String?
+  purchaseYear    Int?
+  dailyRateMad    Float?
+  isListed        Boolean         @default(false)
+  isFlagged       Boolean         @default(false)
+  category           EquipmentCategory @default(OTHER)   // DB default is a migration safety net only - zod makes it mandatory going forward
+  listingType        ListingType       @default(RENT)
+  condition          Condition         @default(USED)
+  salePrice          Float?
+  negotiable         Boolean           @default(false)
+  yearOfManufacture  Int?
+  hoursUsed          Float?
+  conditionNotes     String?
+  conditionPhotos    Json?             // string[] - Json since SQLite has no native array type
+  warrantyMonths     Int?
+  dealerCertified    Boolean           @default(false)
+  requiresModeration Boolean           @default(false)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  tasks              Task[]
+  alerts             EquipmentAlert[]
+  trackPoints        EquipmentTrackPoint[]
+  performanceSamples EquipmentPerformanceSample[]
+  bookings           Booking[]
+  maintenanceRecords MaintenanceRecord[]
+
+  @@index([ownerId])
+  @@index([currentFarmId])
+}
+
+model Task {
+  id              String       @id @default(cuid())
+  equipmentId     String?
+  equipment       Equipment?   @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  farmId          String
+  farm            Farm         @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  fieldId         String?
+  field           Field?       @relation(fields: [fieldId], references: [id])
+  workerId        String?
+  worker          Worker?      @relation(fields: [workerId], references: [id])
+  title           String
+  description     String?
+  status          TaskStatus   @default(PENDING)
+  priority        TaskPriority @default(MEDIUM)
+  scheduledStart  DateTime
+  scheduledEnd    DateTime?
+  distanceKm      Float?       @default(0)
+  durationMinutes Int?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([equipmentId, scheduledStart])
+  @@index([farmId, scheduledStart])
+  @@index([workerId])
+}
+
+model EquipmentAlert {
+  id          String        @id @default(cuid())
+  equipmentId String
+  equipment   Equipment     @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  type        AlertType
+  severity    AlertSeverity
+  message     String
+  isResolved  Boolean       @default(false)
+  createdAt   DateTime      @default(now())
+
+  @@index([equipmentId, createdAt])
+}
+
+model EquipmentTrackPoint {
+  id          String    @id @default(cuid())
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  lat         Float
+  lng         Float
+  speedKmh    Float?
+  heading     Float?
+  recordedAt  DateTime
+
+  @@index([equipmentId, recordedAt])
+}
+
+model EquipmentPerformanceSample {
+  id              String    @id @default(cuid())
+  equipmentId     String
+  equipment       Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  date            DateTime
+  runningHours    Float
+  distanceKm      Float
+  tasksCompleted  Int
+  efficiencyScore Float
+  createdAt       DateTime  @default(now())
+
+  @@unique([equipmentId, date])
+  @@index([equipmentId, date])
+}
+
+model Booking {
+  id             String        @id @default(cuid())
+  equipmentId    String
+  equipment      Equipment     @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  renterId       String
+  renter         User          @relation("BookingRenter", fields: [renterId], references: [id])
+  type           TransactionType @default(RENT)
+  startDate      DateTime?     // RENT-only from here down; nullable to support dateless SALE transactions
+  endDate        DateTime?
+  status         BookingStatus @default(PENDING)
+  dailyRateMad   Float?
+  totalPriceMad  Float         // RENT: computed from dailyRateMad x days. SALE: the agreed/offered price.
+  offeredPriceMad     Float?   // buyer's initial offer for a SALE, may differ from Equipment.salePrice if negotiable
+  financingRequested  Boolean  @default(false)
+  depositMad     Float?
+  paymentStatus  PaymentStatus @default(PENDING)
+  pickupLocation String?
+  returnLocation String?
+  notes          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  reviews          Review[]
+  financingRequest FinancingRequest?
+
+  @@index([equipmentId, status])
+  @@index([renterId])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  bookingId String
+  booking   Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  @@unique([bookingId, authorId])
+}
+
+model FinancingRequest {
+  id                 String          @id @default(cuid())
+  // Optional: only set when this request originated as a side effect of a
+  // marketplace SALE booking (see POST /api/bookings). A standalone
+  // application submitted through the financing wizard has no Booking.
+  bookingId          String?         @unique
+  booking            Booking?        @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  farmerId           String
+  farmer             User            @relation("FinancingRequestFarmer", fields: [farmerId], references: [id])
+  bankerId           String?         // unassigned until a banker acts on it
+  banker             User?           @relation("FinancingRequestBanker", fields: [bankerId], references: [id])
+  requestedAmountMad Float
+  purpose            String?
+  documentUrls       Json?           // Partial<Record<FinancingDocumentType, string>> - Json since SQLite has no native object/array type
+  status             FinancingStatus @default(SUBMITTED)
+  reviewNotes        String?
+
+  // Step 1 - Identification du demandeur (snapshot at submission time, not a
+  // live FK to User - the applicant may be a legal entity distinct from the
+  // logged-in farmer's own profile).
+  clientType        ClientType?
+  applicantName     String?
+  applicantIdNumber String? // CIN or ICE
+  applicantPhone    String?
+  applicantEmail    String?
+  region            String?
+  province          String?
+  commune           String?
+
+  // Step 2 - Informations sur l'exploitation
+  farmSizeHectares      Float?
+  irrigatedAreaHectares Float?
+  rainfedAreaHectares   Float?
+  farmCount             Int?
+  employeeCount         Int?
+  activityTypes         Json? // FarmActivityType[] - Json since SQLite has no native array type
+
+  // Step 3 - Éligibilité
+  hasPriorFinancing Boolean?
+  subsidyRequested  Boolean?
+
+  // Financing terms + chosen offer, carried forward from the Stage 1
+  // simulator and Stage 2 offer comparison (both client-side/stateless).
+  equipmentLines           Json? // {name, unitPrice, quantity, category?}[]
+  primaryEquipmentCategory EquipmentCategory?
+  downPaymentMad           Float?
+  termMonths               Int?
+  monthlyPaymentMad        Float?
+  chosenOfferId            String?
+  chosenOfferInstitution   String?
+  chosenOfferMode          String?
+  chosenOfferRatePct       Float?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([bankerId, status])
+  @@index([farmerId])
+}
+
+model ActivityLog {
+  id         String          @id @default(cuid())
+  actorId    String
+  actor      User            @relation("ActivityLogActor", fields: [actorId], references: [id])
+  action     AdminActionType
+  targetType String          // "USER" | "EQUIPMENT" - plain string, not enum: a polymorphic-FK enum
+                              // would fight the existing Record<Enum,...> exhaustiveness pattern more than serve it
+  targetId   String
+  metadata   Json?           // e.g. { fromRole, toRole } or { fromFlagged, toFlagged }
+  createdAt  DateTime        @default(now())
+
+  @@index([actorId, createdAt])
+  @@index([targetType, targetId])
+}
+
+model MaintenanceRecord {
+  id          String    @id @default(cuid())
+  equipmentId String
+  equipment   Equipment @relation(fields: [equipmentId], references: [id], onDelete: Cascade)
+  performedAt DateTime
+  nextDueAt   DateTime?
+  cost        Float?
+  mechanic    String?
+  notes       String?
+  createdAt   DateTime  @default(now())
+
+  @@index([equipmentId, performedAt])
+}
+
+model CropCycle {
+  id                String    @id @default(cuid())
+  fieldId           String
+  field             Field     @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  cropType          CropType
+  plantedAt         DateTime
+  harvestedAt       DateTime?
+  expectedHarvestAt DateTime?
+  growthStage       String?
+  expectedYieldKg   Float?
+  actualYieldKg     Float?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([fieldId, plantedAt])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+
+  @@index([userId, isRead])
+  @@index([userId, createdAt])
+}
+
+model Crop {
+  id                    String   @id @default(cuid())
+  type                  CropType @unique
+  name                  String
+  scientificName        String?
+  category              String?
+  growingSeason         String?
+  averageYieldKgPerHa   Float?
+  waterRequirementMm    Float?
+  fertilizerRequirement String?
+  growthDurationDays    Int?
+  minTempC              Float?
+  maxTempC              Float?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+}
+
+model WeatherCache {
+  farmId             String   @id
+  farm               Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  fetchedAt          DateTime
+  temperatureC       Float?
+  humidityPct        Float?
+  windSpeedKmh       Float?
+  rainfallMm         Float?
+  pressureHpa        Float?
+  rainProbabilityPct Float?
+  isFrostRisk        Boolean  @default(false)
+  isHeatRisk         Boolean  @default(false)
+  source             String   @default("open-meteo")
+}
+
+model SoilCache {
+  farmId           String   @id
+  farm             Farm     @relation(fields: [farmId], references: [id], onDelete: Cascade)
+  fetchedAt        DateTime
+  ph               Float?
+  nitrogen         Float?
+  phosphorus       Float?
+  potassium        Float?
+  organicMatterPct Float?
+  soilMoisturePct  Float?
+  source           String   @default("soilgrids")
+}

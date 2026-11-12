@@ -1,0 +1,132 @@
+{
+  "BARLEY": {
+    "crop_type": "BARLEY",
+    "n_rows": 408,
+    "n_train": 326,
+    "n_test": 82,
+    "linear": {
+      "intercept": 3323.76,
+      "coefficients": {
+        "avg_temp_c": -65.1971,
+        "total_precip_mm": 0.8085
+      },
+      "test_metrics": {
+        "rmse": 1196.0,
+        "mae": 937.1,
+        "r2": 0.106
+      }
+    },
+    "gbm": {
+      "test_metrics": {
+        "rmse": 890.1,
+        "mae": 707.4,
+        "r2": 0.505
+      }
+    },
+    "yield_kg_ha_mean_in_data": 2834.2
+  },
+  "CITRUS": {
+    "crop_type": "CITRUS",
+    "n_rows": 380,
+    "n_train": 304,
+    "n_test": 76,
+    "linear": {
+      "intercept": 12473.57,
+      "coefficients": {
+        "avg_temp_c": 436.6978,
+        "total_precip_mm": -1.563
+      },
+      "test_metrics": {
+        "rmse": 6396.8,
+        "mae": 5101.7,
+        "r2": 0.082
+      }
+    },
+    "gbm": {
+      "test_metrics": {
+        "rmse": 4912.3,
+        "mae": 3690.9,
+        "r2": 0.458
+      }
+    },
+    "yield_kg_ha_mean_in_data": 18764.8
+  },
+  "OLIVES": {
+    "crop_type": "OLIVES",
+    "n_rows": 288,
+    "n_train": 230,
+    "n_test": 58,
+    "linear": {
+      "intercept": 4340.79,
+      "coefficients": {
+        "avg_temp_c": 3.5757,
+        "total_precip_mm": -2.3497
+      },
+      "test_metrics": {
+        "rmse": 2802.0,
+        "mae": 1928.6,
+        "r2": -0.075
+      }
+    },
+    "gbm": {
+      "test_metrics": {
+        "rmse": 2207.8,
+        "mae": 1213.5,
+        "r2": 0.332
+      }
+    },
+    "yield_kg_ha_mean_in_data": 2934.4
+  },
+  "VEGETABLES": {
+    "crop_type": "VEGETABLES",
+    "n_rows": 408,
+    "n_train": 326,
+    "n_test": 82,
+    "linear": {
+      "intercept": 28580.38,
+      "coefficients": {
+        "avg_temp_c": -160.4527,
+        "total_precip_mm": -3.3525
+      },
+      "test_metrics": {
+        "rmse": 6259.5,
+        "mae": 4968.5,
+        "r2": 0.095
+      }
+    },
+    "gbm": {
+      "test_metrics": {
+        "rmse": 5099.7,
+        "mae": 3782.9,
+        "r2": 0.399
+      }
+    },
+    "yield_kg_ha_mean_in_data": 24021.3
+  },
+  "WHEAT": {
+    "crop_type": "WHEAT",
+    "n_rows": 408,
+    "n_train": 326,
+    "n_test": 82,
+    "linear": {
+      "intercept": 3545.13,
+      "coefficients": {
+        "avg_temp_c": -10.7753,
+        "total_precip_mm": -0.3311
+      },
+      "test_metrics": {
+        "rmse": 1549.4,
+        "mae": 1112.8,
+        "r2": 0.02
+      }
+    },
+    "gbm": {
+      "test_metrics": {
+        "rmse": 908.5,
+        "mae": 611.1,
+        "r2": 0.663
+      }
+    },
+    "yield_kg_ha_mean_in_data": 3182.6
+  }
+}

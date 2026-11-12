@@ -1,0 +1,11 @@
+{
+  "test_year": 2028,
+  "seasonal_model": {
+    "rmse": 1.361,
+    "mae": 1.097
+  },
+  "naive_baseline": {
+    "rmse": 1.332,
+    "mae": 1.051
+  }
+}

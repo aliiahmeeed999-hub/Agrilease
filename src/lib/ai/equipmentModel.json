@@ -1,0 +1,469 @@
+{
+  "featureNames": [
+    "crop_WHEAT",
+    "crop_BARLEY",
+    "crop_OLIVES",
+    "crop_CITRUS",
+    "crop_VEGETABLES",
+    "task_PLOWING",
+    "task_SPRAYING",
+    "task_HARVESTING",
+    "task_TRANSPORT",
+    "task_IRRIGATION",
+    "farm_size_ha",
+    "month"
+  ],
+  "cropTypes": [
+    "WHEAT",
+    "BARLEY",
+    "OLIVES",
+    "CITRUS",
+    "VEGETABLES"
+  ],
+  "taskTypes": [
+    "PLOWING",
+    "SPRAYING",
+    "HARVESTING",
+    "TRANSPORT",
+    "IRRIGATION"
+  ],
+  "tree": [
+    {
+      "leaf": false,
+      "feature": 9,
+      "threshold": 0.5,
+      "left": 1,
+      "right": 52
+    },
+    {
+      "leaf": false,
+      "feature": 8,
+      "threshold": 0.5,
+      "left": 2,
+      "right": 31
+    },
+    {
+      "leaf": false,
+      "feature": 6,
+      "threshold": 0.5,
+      "left": 3,
+      "right": 18
+    },
+    {
+      "leaf": false,
+      "feature": 7,
+      "threshold": 0.5,
+      "left": 4,
+      "right": 11
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 5.5,
+      "left": 5,
+      "right": 8
+    },
+    {
+      "leaf": false,
+      "feature": 4,
+      "threshold": 0.5,
+      "left": 6,
+      "right": 7
+    },
+    {
+      "leaf": true,
+      "predictedClass": "PLOW",
+      "confidence": 0.7719298245614035
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRACTOR",
+      "confidence": 0.6
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 2.399999976158142,
+      "left": 9,
+      "right": 10
+    },
+    {
+      "leaf": true,
+      "predictedClass": "PLOW",
+      "confidence": 1.0
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRACTOR",
+      "confidence": 0.5263157894736842
+    },
+    {
+      "leaf": false,
+      "feature": 3,
+      "threshold": 0.5,
+      "left": 12,
+      "right": 15
+    },
+    {
+      "leaf": false,
+      "feature": 4,
+      "threshold": 0.5,
+      "left": 13,
+      "right": 14
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRACTOR",
+      "confidence": 0.5774647887323944
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRACTOR",
+      "confidence": 0.5333333333333333
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 5.5,
+      "left": 16,
+      "right": 17
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 0.5555555555555556
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRACTOR",
+      "confidence": 0.6666666666666666
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 3.950000047683716,
+      "left": 19,
+      "right": 24
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 7.5,
+      "left": 20,
+      "right": 23
+    },
+    {
+      "leaf": false,
+      "feature": 1,
+      "threshold": 0.5,
+      "left": 21,
+      "right": 22
+    },
+    {
+      "leaf": true,
+      "predictedClass": "SPRAYER",
+      "confidence": 1.0
+    },
+    {
+      "leaf": true,
+      "predictedClass": "SPRAYER",
+      "confidence": 0.5714285714285714
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRACTOR",
+      "confidence": 1.0
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 11.799999713897705,
+      "left": 25,
+      "right": 28
+    },
+    {
+      "leaf": false,
+      "feature": 3,
+      "threshold": 0.5,
+      "left": 26,
+      "right": 27
+    },
+    {
+      "leaf": true,
+      "predictedClass": "SPRAYER",
+      "confidence": 0.918918918918919
+    },
+    {
+      "leaf": true,
+      "predictedClass": "SPRAYER",
+      "confidence": 0.7142857142857143
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 12.400000095367432,
+      "left": 29,
+      "right": 30
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRACTOR",
+      "confidence": 0.8
+    },
+    {
+      "leaf": true,
+      "predictedClass": "SPRAYER",
+      "confidence": 0.7142857142857143
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 6.5,
+      "left": 32,
+      "right": 43
+    },
+    {
+      "leaf": false,
+      "feature": 0,
+      "threshold": 0.5,
+      "left": 33,
+      "right": 40
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 7.75,
+      "left": 34,
+      "right": 37
+    },
+    {
+      "leaf": false,
+      "feature": 3,
+      "threshold": 0.5,
+      "left": 35,
+      "right": 36
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 1.0
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 0.7777777777777778
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 16.299999713897705,
+      "left": 38,
+      "right": 39
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 0.5625
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 0.875
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 2.5,
+      "left": 41,
+      "right": 42
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 0.6666666666666666
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRACTOR",
+      "confidence": 0.8888888888888888
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 12.450000286102295,
+      "left": 44,
+      "right": 47
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 1.8499999642372131,
+      "left": 45,
+      "right": 46
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 0.8
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 1.0
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 14.550000190734863,
+      "left": 48,
+      "right": 49
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRACTOR",
+      "confidence": 0.6
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 9.5,
+      "left": 50,
+      "right": 51
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 1.0
+    },
+    {
+      "leaf": true,
+      "predictedClass": "TRAILER",
+      "confidence": 0.8
+    },
+    {
+      "leaf": false,
+      "feature": 4,
+      "threshold": 0.5,
+      "left": 53,
+      "right": 68
+    },
+    {
+      "leaf": false,
+      "feature": 3,
+      "threshold": 0.5,
+      "left": 54,
+      "right": 61
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 1.5,
+      "left": 55,
+      "right": 56
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 0.8333333333333334
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 9.5,
+      "left": 57,
+      "right": 58
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 1.0
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 10.5,
+      "left": 59,
+      "right": 60
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 0.8571428571428571
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 1.0
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 10.5,
+      "left": 62,
+      "right": 67
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 22.449999809265137,
+      "left": 63,
+      "right": 66
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 3.5,
+      "left": 64,
+      "right": 65
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 1.0
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 0.7647058823529411
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 1.0
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 1.0
+    },
+    {
+      "leaf": false,
+      "feature": 11,
+      "threshold": 6.5,
+      "left": 69,
+      "right": 72
+    },
+    {
+      "leaf": false,
+      "feature": 10,
+      "threshold": 6.150000095367432,
+      "left": 70,
+      "right": 71
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 0.625
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 0.7777777777777778
+    },
+    {
+      "leaf": true,
+      "predictedClass": "IRRIGATION_PUMP",
+      "confidence": 1.0
+    }
+  ]
+}

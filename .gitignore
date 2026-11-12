@@ -1,0 +1,61 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+/src/generated/prisma
+/src/generated/prisma-postgres
+/prisma/schema.postgres.prisma
+
+# locally-stored financing application documents (CIN, bank statements, ...) -
+# sensitive, served only via an authenticated route handler, never committed
+/uploads
+
+# raw FAOSTAT bulk download (~90MB) and its NASA POWER climate cache -
+# regenerable via scripts/ml/build_yield_dataset.py (see scripts/ml/README.md).
+# The derived yield_training_data.csv / training_results.json / gbm_parity_check.json
+# ARE committed - those are the actual reproducible, review-sized artifacts.
+/scripts/ml/data/*.csv
+!/scripts/ml/data/yield_training_data.csv
+/scripts/ml/data/climate_cache.json
+
+# MapLibre worker, copied from node_modules by scripts/copy-maplibre-worker.mjs
+/public/vendor/maplibre/

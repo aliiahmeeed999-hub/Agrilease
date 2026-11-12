@@ -1,0 +1,373 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* IBM Plex Sans (+ Plex Sans Arabic) for everything people read and use;
+     Fraunces only for page and section titles. */
+  --font-sans: var(--font-plex), var(--font-plex-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  --font-heading: var(--font-sans);
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-warning: var(--warning);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  /* Radius scale: tight, closer to paper and stamped tags than to pills.
+     Controls (lg, 8px) sit inside cards (2xl, 12px). */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.625rem;
+  --radius-2xl: 0.75rem;
+  --radius-3xl: 1rem;
+  --radius-4xl: 1.25rem;
+  --color-success: var(--success);
+  --color-info: var(--info);
+  --color-terracotta: var(--terracotta);
+  /* Motion tokens. One "press" timing for instant feedback, one standard
+     ease-out for anything that enters or settles. */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --default-transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+:root {
+  /* Limestone, olive and terracotta. A light, paper-like ground because the
+     product is used on phones outdoors; olive is the one colour for actions;
+     terracotta is the signature accent. Every text pair is WCAG AA. */
+  color-scheme: light;
+  --background: oklch(0.975 0.01 85); /* limestone paper  #faf6ef */
+  --foreground: oklch(0.24 0.025 60); /* soil ink         #281c13 */
+  --card: oklch(0.993 0.005 85);
+  --card-foreground: oklch(0.24 0.025 60);
+  --popover: oklch(0.993 0.005 85);
+  --popover-foreground: oklch(0.24 0.025 60);
+  --primary: oklch(0.46 0.1 128); /* olive            #48621e */
+  --primary-foreground: oklch(0.985 0.01 90);
+  --secondary: oklch(0.945 0.012 85);
+  --secondary-foreground: oklch(0.24 0.025 60);
+  --muted: oklch(0.945 0.012 85);
+  --muted-foreground: oklch(0.47 0.02 70);
+  --accent: oklch(0.93 0.025 120);
+  --accent-foreground: oklch(0.3 0.06 128);
+  --terracotta: oklch(0.55 0.14 40); /* clay        #b34f2a */
+  --destructive: oklch(0.52 0.19 27);
+  --warning: oklch(0.52 0.12 65); /* ochre */
+  --success: oklch(0.48 0.11 155);
+  --info: oklch(0.49 0.12 248); /* Chefchaouen blue */
+  --border: oklch(0.885 0.015 80);
+  --input: oklch(0.64 0.02 75); /* 3:1 against paper, as form fields need */
+  --ring: oklch(0.46 0.1 128 / 60%);
+  --chart-1: oklch(0.46 0.1 128);
+  --chart-2: oklch(0.55 0.14 40);
+  --chart-3: oklch(0.49 0.12 248);
+  --chart-4: oklch(0.62 0.12 75);
+  --chart-5: oklch(0.55 0.03 70);
+  --radius: 0.5rem;
+  --sidebar: oklch(0.955 0.014 85);
+  --sidebar-foreground: oklch(0.24 0.025 60);
+  --sidebar-primary: oklch(0.46 0.1 128);
+  --sidebar-primary-foreground: oklch(0.985 0.01 90);
+  --sidebar-accent: oklch(0.925 0.02 85);
+  --sidebar-accent-foreground: oklch(0.24 0.025 60);
+  --sidebar-border: oklch(0.885 0.015 80);
+  --sidebar-ring: oklch(0.46 0.1 128 / 60%);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    scroll-padding-top: 5rem;
+    /* Stop mobile browsers inflating text on rotation; the layout already
+       scales with the user's own text-size setting because it is rem-based. */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-optical-sizing: auto;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Keyboard focus. Components that draw their own ring opt out with
+     outline-none; everything else (plain links, raw buttons, cards that act
+     as links) gets one consistent, clearly visible indicator. */
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Arabic. Letters join, so any letter-spacing (tight headings, wide
+     uppercase eyebrows) visibly breaks words apart; it is reset here once
+     instead of in every component. Arabic also has taller ascenders,
+     descenders and diacritics than Latin, so tight leading clips it. */
+  :lang(ar) *,
+  :lang(ar) *::before,
+  :lang(ar) *::after {
+    letter-spacing: 0 !important;
+  }
+  :lang(ar) body {
+    line-height: 1.7;
+  }
+  :lang(ar) :is(.type-display, .type-title-1, .type-title-display-2) {
+    font-family: var(--font-plex-arabic), var(--font-sans);
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  :lang(ar) :is(.leading-none, .leading-tight, .leading-snug) {
+    line-height: 1.5;
+  }
+
+  /* Numbers that sit in columns, prices and counters should not jitter. */
+  .tabular,
+  table {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Type scale. Size, leading, tracking and weight travel together as one
+   named step, so hierarchy stays the same on every screen. Named type-*
+   (not text-*) so tailwind-merge never mistakes them for a colour. */
+@utility type-display {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 6vw + 0.75rem, 4.75rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+  font-weight: 500;
+  font-variation-settings: "SOFT" 60, "opsz" 144;
+}
+@utility type-title-1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 1.4vw + 1.35rem, 2.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.012em;
+  font-weight: 500;
+  font-variation-settings: "SOFT" 60, "opsz" 72;
+}
+/* Section heading on the public site. */
+@utility type-title-display-2 {
+  font-family: var(--font-display);
+  font-size: clamp(1.875rem, 2.4vw + 1.2rem, 3rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  font-weight: 500;
+  font-variation-settings: "SOFT" 60, "opsz" 96;
+}
+@utility type-title-2 {
+  font-size: 1.25rem;
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+@utility type-headline {
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: -0.006em;
+  font-weight: 600;
+}
+@utility type-body {
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+@utility type-caption {
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  letter-spacing: 0.004em;
+}
+/* Small all-caps section label ("eyebrow"). */
+@utility type-overline {
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Sticky chrome (header, mobile action bar): solid paper with a hairline,
+   so it reads as part of the page rather than a floating glass sheet. */
+@utility material-chrome {
+  background-color: var(--background);
+}
+
+/* Signature 1 - furrows. Fine parallel lines, like ploughed strips seen from
+   the air (the same view as the home-page photo). Used for dividers, empty
+   states and the edge of the public site's panels; never behind text people
+   need to read. */
+@utility bg-furrows {
+  background-image: repeating-linear-gradient(
+    -62deg,
+    color-mix(in oklch, var(--terracotta) 22%, transparent) 0 1px,
+    transparent 1px 7px
+  );
+}
+@utility rule-furrows {
+  height: 0.5rem;
+  background-image: repeating-linear-gradient(
+    90deg,
+    color-mix(in oklch, var(--foreground) 28%, transparent) 0 1px,
+    transparent 1px 6px
+  );
+}
+
+/* Signature 2 - ledger rows. A label and a figure joined by a dotted leader,
+   like a price list in a souk or a page of a farm account book. Used for
+   prices, specs and summaries. Put .ledger on the row and .ledger-fill on an
+   empty element between label and value. */
+@utility ledger {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+@utility ledger-fill {
+  flex: 1 1 1.5rem;
+  min-width: 1.5rem;
+  border-bottom: 1.5px dotted color-mix(in oklch, var(--foreground) 30%, transparent);
+  transform: translateY(-0.3em);
+}
+
+/* A hit area of at least 44px for small icon buttons, without changing how
+   big they look. The parent must not clip overflow. */
+@utility tap-target {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 50%;
+    width: max(100%, 2.75rem);
+    height: max(100%, 2.75rem);
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Accessibility preferences: gentler, not absent. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-property: opacity, color, background-color, border-color, box-shadow !important;
+    transition-duration: 150ms !important;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .material-chrome {
+    background-color: var(--background);
+  }
+}
+@media (prefers-contrast: more) {
+  :root {
+    --border: oklch(0.6 0.02 75);
+    --input: oklch(0.45 0.02 75);
+    --muted-foreground: oklch(0.36 0.02 70);
+  }
+  .material-chrome {
+    background-color: var(--background);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* ------------------------------------------------------------------------
+   Maps (MapLibre). Controls follow the app's surfaces: paper card, hairline
+   border, 8px corners, 40px targets (44px on touch screens).
+   ------------------------------------------------------------------------ */
+.agri-map .maplibregl-ctrl-group {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 1px 2px rgb(40 28 19 / 0.08);
+  overflow: hidden;
+}
+.agri-map .maplibregl-ctrl-group button {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--foreground);
+}
+@media (pointer: coarse) {
+  .agri-map .maplibregl-ctrl-group button {
+    width: 2.75rem;
+    height: 2.75rem;
+  }
+}
+.agri-map .maplibregl-ctrl-group button + button {
+  border-top: 1px solid var(--border);
+}
+.agri-map .maplibregl-ctrl-group button:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+.agri-map .agri-map-reset {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.agri-map .maplibregl-ctrl-attrib {
+  background: color-mix(in oklch, var(--card) 90%, transparent);
+  font-size: 0.6875rem;
+  color: var(--muted-foreground);
+}
+.agri-map .maplibregl-ctrl-scale {
+  border-color: var(--muted-foreground);
+  color: var(--foreground);
+  background: color-mix(in oklch, var(--card) 85%, transparent);
+  font-size: 0.6875rem;
+}
+.agri-map .maplibregl-cooperative-gesture-screen {
+  background: rgb(40 28 19 / 0.55);
+  font-size: 0.9375rem;
+}
+/* Fullscreen: the wrapper (map + panels + legend) fills the screen. */
+.agri-map:fullscreen {
+  border-radius: 0;
+  border: 0;
+}
