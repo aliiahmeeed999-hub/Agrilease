@@ -78,5 +78,5 @@ Server-side caching: Overpass 24 h (by bbox snapped to 0.05°), Nominatim 24 h, 
 - OpenStreetMap coverage of agricultural shops and rural water infrastructure in Morocco is incomplete.
 - MODIS NDVI at 250 m is coarse for small fields; there is no field-level Sentinel-2 NDVI (that needs a Sentinel Hub / Copernicus Data Space account).
 - HLS imagery is daily but a place is only covered every 2–5 days; some dates are blank or cloudy.
-- No PostGIS: the app runs on SQLite in development, and current spatial needs are met in application code. Worth revisiting if spatial queries over many farms are needed.
+- No PostGIS: the app runs on PostgreSQL without the PostGIS extension, and current spatial needs (area, centroid, self-intersection, distances) are met in application code (`src/lib/geo.ts`). Worth adding PostGIS if spatial queries over many farms are needed.
 - The demo seed draws fields as fixed-size squares that do not match their entered areas.

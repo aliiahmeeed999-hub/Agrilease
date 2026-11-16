@@ -27,3 +27,9 @@ export function sendAssistantMessage(message: string, history?: AssistantChatMes
     body: JSON.stringify({ message, history }),
   });
 }
+
+// Gemini-written explanation of the yield or recommendation results, in the
+// given locale. `summary` is null when Gemini is unavailable.
+export function getAiSummary(kind: "yield" | "recommendations", locale: string) {
+  return apiRequest<{ summary: string | null }>(`/api/ai/${kind}/summary?locale=${encodeURIComponent(locale)}`);
+}

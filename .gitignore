@@ -42,8 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
-/src/generated/prisma-postgres
-/prisma/schema.postgres.prisma
 
 # locally-stored financing application documents (CIN, bank statements, ...) -
 # sensitive, served only via an authenticated route handler, never committed

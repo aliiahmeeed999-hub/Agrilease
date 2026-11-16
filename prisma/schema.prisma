@@ -7,7 +7,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
 }
 
 enum Role {
@@ -276,7 +276,7 @@ model BankerProfile {
   userId                  String   @unique
   user                    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   institutionName         String
-  regionsCovered          Json?    // string[] - Json since SQLite has no native array type
+  regionsCovered          Json?    // string[]
   defaultInterestRateText String?
   defaultTermsText        String?
   createdAt               DateTime @default(now())
@@ -380,7 +380,7 @@ model Equipment {
   yearOfManufacture  Int?
   hoursUsed          Float?
   conditionNotes     String?
-  conditionPhotos    Json?             // string[] - Json since SQLite has no native array type
+  conditionPhotos    Json?             // string[]
   warrantyMonths     Int?
   dealerCertified    Boolean           @default(false)
   requiresModeration Boolean           @default(false)
@@ -520,7 +520,7 @@ model FinancingRequest {
   banker             User?           @relation("FinancingRequestBanker", fields: [bankerId], references: [id])
   requestedAmountMad Float
   purpose            String?
-  documentUrls       Json?           // Partial<Record<FinancingDocumentType, string>> - Json since SQLite has no native object/array type
+  documentUrls       Json?           // Partial<Record<FinancingDocumentType, string>>
   status             FinancingStatus @default(SUBMITTED)
   reviewNotes        String?
 
@@ -542,7 +542,7 @@ model FinancingRequest {
   rainfedAreaHectares   Float?
   farmCount             Int?
   employeeCount         Int?
-  activityTypes         Json? // FarmActivityType[] - Json since SQLite has no native array type
+  activityTypes         Json? // FarmActivityType[]
 
   // Step 3 - Éligibilité
   hasPriorFinancing Boolean?

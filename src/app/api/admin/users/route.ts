@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
       ...(role ? { role } : {}),
       ...(verificationStatus ? { verificationStatus } : {}),
       ...(search
-        ? { OR: [{ fullName: { contains: search } }, { email: { contains: search } }] }
+        ? { OR: [{ fullName: { contains: search, mode: "insensitive" } }, { email: { contains: search, mode: "insensitive" } }] }
         : {}),
     };
 

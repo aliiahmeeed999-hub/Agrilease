@@ -222,8 +222,7 @@
     "backToHome": "Retour à l'accueil",
     "roleFarmerHint": "Gérer vos champs, louer et acheter du matériel",
     "roleRentalOwnerHint": "Proposer du matériel à louer ou à vendre",
-    "roleBankerHint": "Examiner les demandes de financement",
-    "roleAdminHint": "Modérer la plateforme",
+    "staffAccountsNote": "Les comptes banque et administrateur sont créés par un administrateur AgriLease.",
     "demoAccountsLabel": "Comptes de démonstration"
   },
   "dashboard": {
@@ -662,7 +661,9 @@
     "assistantSoilNitrogen": "{value} g/kg d'azote",
     "assistantSoilSummary": "Le sol de votre ferme (source SoilGrids) : {parts}.",
     "assistantSoilLabel": "Sol de la ferme",
-    "assistantFallback": "Je peux vous aider avec les prévisions de rendement, les recommandations d'équipement, les prévisions de demande et les conditions météo/sol actuelles de votre ferme. Essayez de demander par exemple « Quelles sont mes perspectives de rendement ? » ou « Quel temps fait-il ? »"
+    "assistantFallback": "Je peux vous aider avec les prévisions de rendement, les recommandations d'équipement, les prévisions de demande et les conditions météo/sol actuelles de votre ferme. Essayez de demander par exemple « Quelles sont mes perspectives de rendement ? » ou « Quel temps fait-il ? »",
+    "summaryTitle": "En clair",
+    "summaryNote": "Rédigé par Gemini à partir des chiffres ci-dessus. Les chiffres eux-mêmes proviennent des modèles entraînés."
   },
   "ownerConsole": {
     "title": "Tableau de bord propriétaire",

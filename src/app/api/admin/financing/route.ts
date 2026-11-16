@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
     const where: Prisma.FinancingRequestWhereInput = {
       // Drafts are private to the farmer until submitted.
       status: status ?? { not: "DRAFT" },
-      ...(region ? { region: { contains: region } } : {}),
+      ...(region ? { region: { contains: region, mode: "insensitive" } } : {}),
       ...(primaryEquipmentCategory ? { primaryEquipmentCategory } : {}),
       ...(chosenOfferInstitution ? { chosenOfferInstitution } : {}),
     };

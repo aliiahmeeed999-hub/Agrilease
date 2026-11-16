@@ -222,8 +222,7 @@
     "backToHome": "Back to home",
     "roleFarmerHint": "Manage fields, rent and buy equipment",
     "roleRentalOwnerHint": "List equipment for rent or sale",
-    "roleBankerHint": "Review financing requests",
-    "roleAdminHint": "Moderate the platform",
+    "staffAccountsNote": "Bank and administrator accounts are created by an AgriLease administrator.",
     "demoAccountsLabel": "Demo accounts"
   },
   "dashboard": {
@@ -662,7 +661,9 @@
     "assistantSoilNitrogen": "{value} g/kg nitrogen",
     "assistantSoilSummary": "Your farm's soil (from SoilGrids): {parts}.",
     "assistantSoilLabel": "Farm soil",
-    "assistantFallback": "I can help with yield predictions, equipment recommendations, demand forecasts, and current weather/soil conditions for your farm. Try asking something like \"What's my yield outlook?\" or \"What's the weather like?\""
+    "assistantFallback": "I can help with yield predictions, equipment recommendations, demand forecasts, and current weather/soil conditions for your farm. Try asking something like \"What's my yield outlook?\" or \"What's the weather like?\"",
+    "summaryTitle": "In plain words",
+    "summaryNote": "Written by Gemini from the figures above. The figures themselves come from the trained models."
   },
   "ownerConsole": {
     "title": "Owner Dashboard",

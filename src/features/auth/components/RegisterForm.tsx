@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useLocale, useTranslations } from "next-intl";
-import { Landmark, ShieldCheck, Sprout, Tractor, type LucideIcon } from "lucide-react";
+import { Sprout, Tractor, type LucideIcon } from "lucide-react";
 import type { AppLocale } from "@/i18n/routing";
 import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -22,11 +22,13 @@ function useRegisterSchema() {
     fullName: z.string().min(2, t("fullNameMinLength")),
     email: z.string().email(t("emailInvalid")),
     password: z.string().min(8, t("passwordMinLength")),
-    role: z.enum(["FARMER", "RENTAL_OWNER", "BANKER", "ADMIN"]),
+    role: z.enum(["FARMER", "RENTAL_OWNER"]),
   });
 }
 
-type Role = "FARMER" | "RENTAL_OWNER" | "BANKER" | "ADMIN";
+// Banker and admin accounts are created by an admin, not by sign-up
+// (see src/app/api/auth/register/route.ts).
+type Role = "FARMER" | "RENTAL_OWNER";
 
 type RegisterFormValues = {
   fullName: string;
@@ -38,8 +40,6 @@ type RegisterFormValues = {
 const ROLES: { value: Role; icon: LucideIcon; labelKey: string; hintKey: string }[] = [
   { value: "FARMER", icon: Sprout, labelKey: "roleFarmer", hintKey: "roleFarmerHint" },
   { value: "RENTAL_OWNER", icon: Tractor, labelKey: "roleRentalOwner", hintKey: "roleRentalOwnerHint" },
-  { value: "BANKER", icon: Landmark, labelKey: "roleBanker", hintKey: "roleBankerHint" },
-  { value: "ADMIN", icon: ShieldCheck, labelKey: "roleAdmin", hintKey: "roleAdminHint" },
 ];
 
 export function RegisterForm() {
@@ -99,6 +99,7 @@ export function RegisterForm() {
             </label>
           ))}
         </div>
+        <p className="mt-2 text-sm text-muted-foreground">{t("staffAccountsNote")}</p>
       </fieldset>
 
       <Field label={t("fullNameLabel")} htmlFor="fullName" error={errors.fullName?.message}>

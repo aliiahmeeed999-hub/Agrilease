@@ -1,9 +1,10 @@
 import "dotenv/config";
 import { PrismaClient } from "../src/generated/prisma/client";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaPg } from "@prisma/adapter-pg";
 import { hashPassword } from "../src/lib/auth/password";
 
-const adapter = new PrismaBetterSqlite3({ url: process.env.DATABASE_URL ?? "file:./dev.db" });
+if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set (see .env.example)");
+const adapter = new PrismaPg(process.env.DATABASE_URL);
 const prisma = new PrismaClient({ adapter });
 
 const FARM_LAT = 33.895;
@@ -82,6 +83,26 @@ async function main() {
       role: "RENTAL_OWNER",
       phone: "+212 6 71 98 76 54",
       region: "Fès-Meknès",
+    },
+  });
+
+  // Bankers can't sign themselves up (only farmers and rental owners can), so
+  // the demo needs one seeded. The institution is fictional on purpose.
+  await prisma.user.create({
+    data: {
+      email: "banker@agrilease.ma",
+      passwordHash,
+      fullName: "Salma El Idrissi",
+      role: "BANKER",
+      region: "Fès-Meknès",
+      bankerProfile: {
+        create: {
+          institutionName: "Agri Finance Maroc (démo)",
+          regionsCovered: ["Fès-Meknès", "Souss-Massa", "Rabat-Salé-Kénitra"],
+          defaultInterestRateText: "6,5 % (indicatif)",
+          defaultTermsText: "12 à 84 mois",
+        },
+      },
     },
   });
 

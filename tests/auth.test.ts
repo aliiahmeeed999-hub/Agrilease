@@ -57,6 +57,28 @@ describe("POST /api/auth/register", () => {
     const body = await res.json();
     expect(body.error.code).toBe("VALIDATION_ERROR");
   });
+
+  it.each(["ADMIN", "BANKER"])("refuses self-registration as %s and creates no account", async (role) => {
+    const email = uniqueEmail(`self-${role.toLowerCase()}`);
+    const res = await register(
+      jsonRequest("/api/auth/register", "POST", { email, password: TEST_PASSWORD, fullName: "Not Allowed", role })
+    );
+    expect(res.status).toBe(422);
+    expect((await res.json()).error.code).toBe("VALIDATION_ERROR");
+    expect(await prisma.user.findUnique({ where: { email } })).toBeNull();
+  });
+
+  it("still lets a rental owner sign up", async () => {
+    const res = await register(
+      jsonRequest("/api/auth/register", "POST", {
+        email: uniqueEmail("owner-signup"),
+        password: TEST_PASSWORD,
+        fullName: "New Owner",
+        role: "RENTAL_OWNER",
+      })
+    );
+    expect(res.status).toBe(201);
+  });
 });
 
 describe("POST /api/auth/login", () => {

@@ -9,6 +9,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { useYieldPrediction } from "@/features/ai/hooks/useYieldPrediction";
 import { YieldFieldCard } from "@/features/ai/components/YieldFieldCard";
 import { YieldComparisonChart } from "@/features/ai/components/YieldComparisonChart";
+import { AiSummary } from "@/features/ai/components/AiSummary";
 
 function YieldSkeleton() {
   return (
@@ -65,6 +66,8 @@ export default function YieldPredictionPage() {
             <h2 className="mb-4 type-headline text-foreground">Predicted vs. prior season</h2>
             <YieldComparisonChart predictions={data.fields} />
           </div>
+
+          <AiSummary kind="yield" />
         </div>
       )}
     </PageShell>

@@ -13,7 +13,11 @@ const registerSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),
   fullName: z.string().min(2),
-  role: z.enum(["FARMER", "RENTAL_OWNER", "BANKER", "ADMIN"]),
+  // Only the two public roles can sign themselves up. Banker and admin
+  // accounts see other users' financial and personal data, so an admin
+  // creates them by changing an existing account's role
+  // (PATCH /api/admin/users/[id], recorded in the activity log).
+  role: z.enum(["FARMER", "RENTAL_OWNER"]),
   locale: z.enum(routing.locales).optional(),
 });
 

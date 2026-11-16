@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/states/EmptyState";
 import { Reveal } from "@/components/motion/Reveal";
 import { useEquipmentRecommendations } from "@/features/ai/hooks/useEquipmentRecommendations";
 import { RecommendationCard } from "@/features/ai/components/RecommendationCard";
+import { AiSummary } from "@/features/ai/components/AiSummary";
 
 function RecommendationsSkeleton() {
   return (
@@ -61,6 +62,7 @@ export default function RecommendationsPage() {
                   <RecommendationCard key={rec.taskId} recommendation={rec} />
                 ))}
               </Reveal>
+              <AiSummary kind="recommendations" className="mt-4" />
             </div>
           )}
 
